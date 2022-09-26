@@ -7,28 +7,26 @@ using namespace std;
 
 int main()
 {
-	string date, lectura;
-	int day, moth, year, contador=0;
+	string date, read;
+	int day{}, moth{}, year{}, contador=0;
 	cout << "Ingresa la fecha: ";
 	cin >> date;
 
 	stringstream split(date);             
 
-	while (getline(split, lectura, '/'))
+	while (getline(split, read, '/'))
 	{
-		cout << "Un valor: " << lectura << endl;
 		if (contador == 0) { // para guadar el dia
-			day = stoi(lectura);
+			day = stoi(read);
 			contador++;
 		}
 		else if (contador == 1) {
-			moth = stoi(lectura);
+			moth = stoi(read);
 			contador++;
 		}
 		else if (contador == 2) {
-			year = stoi(lectura);
+			year = stoi(read);
 		}
-		
 	}
-	Date date();
+	Date fecha(day, moth, year);
 }
