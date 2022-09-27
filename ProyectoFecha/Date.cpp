@@ -9,6 +9,46 @@ Date::Date(int day, int moth, int year)
 	checkDate();
 }
 
+Date& Date::operator++()
+{
+	// TODO: Insertar una instrucción "return" aquí
+	AddDays(1);
+	return *this;
+}
+
+void Date::AddDays(int nDaysToAdd)
+{
+	day += nDaysToAdd;
+	if (day > 31)
+	{
+		AddMonths(day / 31);
+
+		day %= 31; // rollover 30th -> 1st
+	}
+}
+
+void Date::AddMonths(int nMonthsToAdd)
+{
+	moth += nMonthsToAdd;
+
+	if (moth > 12)
+	{
+		AddYears(moth / 12);
+
+		moth %= 12; // rollover dec -> jan
+	}
+}
+
+void Date::AddYears(int m_nYearsToAdd)
+{
+	year += m_nYearsToAdd;
+}
+
+void Date::showDate()
+{
+	cout << "La fecha es: "<<day<<"/"<<moth<<"/"<<year<<"\n";
+}
+
 void Date::leapYear(int year, bool correctInfo)
 {
 	if (year % 4 != 0 || (year % 100 == 0 && year % 400 != 0)) {
@@ -32,50 +72,55 @@ bool Date::checkYear(int year)
 
 bool Date::checkMoth(int year, bool correctInfo)
 {
-	if (moth >= 1 && moth <= 12) {
-		correctInfo = true;
-		if (moth == 2) {
-			if (day >= 1 && day <= 29) {
+	if (correctInfo == true) {
+		if (moth >= 1 && moth <= 12) {
+			if (moth == 2) {
+				if (day >= 1 && day <= 29) {
 
-				leapYear(year, correctInfo);
+					leapYear(year, correctInfo);
 
+				}
+				else {
+					cout << "El dia es incorrecto\n";
+
+				}
 			}
 			else {
-				cout << "El dia es incorrecto\n";
-
+				checkDay(year, correctInfo);
 			}
 		}
 		else {
-			checkDay(year, correctInfo);
+			correctInfo = false;
 		}
-	}
-	else {
-		cout << "El mes es incorrecto\n";
 	}
 	return correctInfo;
 }
 
 bool Date::checkDay(int year, bool correctInfo)
 {
-	if (day >= 1 && day <= 31) {
-		correctInfo = true;
-		leapYear(year, correctInfo);
+	if (correctInfo == true) {
+		if (day >= 1 && day <= 31) {
+			correctInfo = true;
+			leapYear(year, correctInfo);
 
-	}
-	else {
-		cout << "El día es incorrecto";
+		}
+		else {
+			correctInfo = false;
+		}
 	}
 	return correctInfo;
 }
 
 
-void Date::checkDate()
+bool Date::checkDate()
 {
 	bool itsOk = checkDay(year, checkMoth(year, checkYear(year)));
 	if (itsOk == true) {
-		cout << "La fecha es correcta";
+		cout << "La fecha es correcta\n";
 	}
 	else {
-		cout << "La fecha es incorrecta";
+		cout << "La fecha es incorrecta\n";
+		itsOk = false;
 	}
+	return itsOk;
 }
